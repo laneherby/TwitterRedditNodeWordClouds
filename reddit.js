@@ -27,6 +27,7 @@ const getPostURLS = async (postsURL) => {
 const createAxiosRequests = async (allPostURLs) => {
     let axiosRequests = [];
     let titleStrings = [];
+    let commentStrings = [];
 
     for (const url of allPostURLs) {
         const getRedditPost = axios.get(`https://www.reddit.com${url}.json`).catch(error => {return error});
@@ -35,9 +36,13 @@ const createAxiosRequests = async (allPostURLs) => {
 
     axios.all(axiosRequests).then(axios.spread((...responses) => {
        for (res of responses) {
-           console.log(res.data[0].data.children[0].data.title);
+           
            titleStrings.push(res.data[0].data.children[0].data.title);
+           commentStrings.push(res.data[1].data.children[0].data.body);
+
+
        }
+        console.log(responses[0].data[1].data.children[0].data.body);
     }));
 };
 
