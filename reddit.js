@@ -24,26 +24,40 @@ const getPostURLS = async (postsURL) => {
     } catch (err) { console.log("here"); }
 };
 
+const getComments = async (commentData) => {
+    console.log(commentData.data.replies.data.children);
+    if (commentData.replies === ""){
+        console.log(commentData.body);
+    } else {
+        for (reply of commentData.data.replies.children) {
+            const tempComments = getComments(reply);
+        }
+    }
+};
+
+const handlePosts = async (postData) => {
+    let postText = [];
+
+    postText.push(postData[0].data.children[0].data.title);    
+
+    for (thread of postData[1].data.children) {
+        const temp = await getComments(thread);
+    }
+};
+
 const createAxiosRequests = async (allPostURLs) => {
     let axiosRequests = [];
-    let titleStrings = [];
-    let commentStrings = [];
 
     for (const url of allPostURLs) {
         const getRedditPost = axios.get(`https://www.reddit.com${url}.json`).catch(error => {return error});
         axiosRequests.push(getRedditPost);
     }
 
-    axios.all(axiosRequests).then(axios.spread((...responses) => {
-       for (res of responses) {
-           
-           titleStrings.push(res.data[0].data.children[0].data.title);
-           commentStrings.push(res.data[1].data.children[0].data.body);
+    const allResponses = await Promise.all(axiosRequests);
 
-
-       }
-        console.log(responses[0].data[1].data.children[0].data.body);
-    }));
+    for (post of allResponses) {
+        const textOnPost = await handlePosts(post.data);
+    }
 };
 
 //starter function with params of name of subreddit and how the posts are sorted
@@ -63,7 +77,6 @@ const initialize = async (subreddit, sort) => {
         return;
     } else {        
         const postRequests = await createAxiosRequests(allPostURLs);
-
     }
 };
 
