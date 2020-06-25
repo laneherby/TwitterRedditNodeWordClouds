@@ -26,11 +26,13 @@ const getPostURLS = async (postsURL) => {
 
 const getComments = async (commentData) => {
     try {
-        if (commentData.data.replies.length<1 && commentData.data.replies){
+        if (!Array.isArray(commentData.data.replies)){
             console.log(commentData.data.body);
+            return [commentData.data.body];
         } else {
             for (reply of commentData.data.replies.data.children) {
-                const tempComments = getComments(reply);
+                const tempComments =  await getComments(reply);
+                tempComments.push(reply.data.body);
             }
         }
     } catch (err) {
@@ -43,10 +45,9 @@ const handlePosts = async (postData) => {
 
     postText.push(postData[0].data.children[0].data.title);    
 
-    // for (thread of postData[1].data.children) {
-    //     const temp = await getComments(thread);
-    // }
-    if(!postData[1].data.children[0].data.replies.data.children) console.log("here");
+    for (thread of postData[1].data.children) {
+        const temp = await getComments(thread);
+    }
 };
 
 const createAxiosRequests = async (allPostURLs) => {
