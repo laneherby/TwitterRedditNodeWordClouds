@@ -37,7 +37,6 @@ const getComments = async (commentData) => {
         for (reply of commentData.data.replies.data.children) {
             let test = await getComments(reply);
         }
-        console.log(tempComments);
     }
 };
 
