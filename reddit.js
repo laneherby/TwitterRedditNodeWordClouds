@@ -21,22 +21,23 @@ const getPostURLS = async (postsURL) => {
         //if subreddit does exist it returns all the post URLs
         if (postURLsFinished===undefined || postURLsFinished.length==0) return false;
         else return postURLsFinished;
-    } catch (err) { console.log("here"); }
+    } catch (err) { console.log(err); }
 };
 
 const getComments = async (commentData) => {
-    try {
-        if (!Array.isArray(commentData.data.replies)){
+    if (typeof(commentData.data.replies) != "object") {
+        if(typeof(commentData.data.replies) != "string") {
+            return [''];
+        } else {
             console.log(commentData.data.body);
             return [commentData.data.body];
-        } else {
-            for (reply of commentData.data.replies.data.children) {
-                const tempComments =  await getComments(reply);
-                tempComments.push(reply.data.body);
-            }
         }
-    } catch (err) {
-        console.log(err);
+    } else {
+        let tempComments = [];
+        for (reply of commentData.data.replies.data.children) {
+            let test = await getComments(reply);
+        }
+        console.log(tempComments);
     }
 };
 
@@ -45,13 +46,16 @@ const handlePosts = async (postData) => {
 
     postText.push(postData[0].data.children[0].data.title);    
 
-    for (thread of postData[1].data.children) {
-        const temp = await getComments(thread);
-    }
+    // for (thread of postData[1].data.children) {
+    //     const threadText = await getComments(thread);
+    //     postText.concat(threadText);
+    // }
+    const threadText = await getComments(postData[1].data.children[0]);
 };
 
 const createAxiosRequests = async (allPostURLs) => {
     let axiosRequests = [];
+    let postsTextArray = [];
 
     for (const url of allPostURLs) {
         const getRedditPost = axios.get(`https://www.reddit.com${url}.json`).catch(error => {return error});
@@ -60,9 +64,14 @@ const createAxiosRequests = async (allPostURLs) => {
 
     const allResponses = await Promise.all(axiosRequests);
 
-    for (post of allResponses) {
-        const textOnPost = await handlePosts(post.data);
-    }
+    // for (post of allResponses) {
+    //     const textOnPost = await handlePosts(post.data);
+    //     console.log(textOnPost);
+    //     postsTextArray.push(textOnPost);
+    // }
+    const textOnPost = await handlePosts(allResponses[0].data);
+
+    return postsTextArray;
 };
 
 //starter function with params of name of subreddit and how the posts are sorted
