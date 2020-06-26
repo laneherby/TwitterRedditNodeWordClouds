@@ -24,26 +24,28 @@ const getPostURLS = async (postsURL) => {
     } catch (err) { console.log(err); }
 };
 
-// const getComments = async (commentData) => {
-//     if (typeof(commentData.data.replies) != "object") {
-//         if(typeof(commentData.data.replies) != "string") {
-//             return [''];
-//         } else {
-//             return [commentData.data.body];
-//         }
-//     } else {
-//         let tempComments = [];
-//         for (reply of commentData.data.replies.data.children) {
-//             let returnArrayComments = await getComments(reply);
-//             tempComments.concat(returnArrayComments);
-//             tempComments.push(reply.data.body);
-//         }
-//         return tempComments;
-//     }
-// };
-
+//Parses through all the comments and gets the strings
+//Ditched recursion, insted parsing from top down of each thread.
+//Get body of top then get all children, then in those children get each body and all their children become next
 const getComments = async (commentData) => {
-    let parentNodes = commentData.data.replies.children
+    const commentsText = [];
+
+    commentsText.push(commentData.data.body); //pushes the top string of the comment thread
+
+    if (!['string', 'undefined'].includes(typeof(commentData.data.replies))) { //checking if the top comment of the thread has no replies
+        let parentNodes = commentData.data.replies.data.children; //top array of children
+        while (parentNodes.length>0) {        
+            let tempNodes = [];
+
+            for await (node of parentNodes) {
+                if (typeof(node.data.body) !== "undefined") commentsText.push(node.data.body); //adding body of current comment to array
+                if (!['string', 'undefined'].includes(typeof(node.data.replies))) tempNodes.push(...node.data.replies.data.children);
+            }    
+
+            parentNodes = [...tempNodes]; //reassigning parentNodes to the new set of children so we iterate downwards
+        }
+    }
+    return commentsText;
 };
 
 const handlePosts = async (postData) => {
@@ -51,12 +53,10 @@ const handlePosts = async (postData) => {
 
     postText.push(postData[0].data.children[0].data.title);    
 
-    // for (thread of postData[1].data.children) {
-    //     const threadText = await getComments(thread);
-    //     postText.concat(threadText);
-    // }
-    const threadText = await getComments(postData[1].data.children[0]);
-    console.log(threadText);
+    for (thread of postData[1].data.children) {
+        const threadText = await getComments(thread);
+        postText.push(...threadText);
+    }    
 };
 
 const createAxiosRequests = async (allPostURLs) => {
