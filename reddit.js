@@ -24,20 +24,26 @@ const getPostURLS = async (postsURL) => {
     } catch (err) { console.log(err); }
 };
 
+// const getComments = async (commentData) => {
+//     if (typeof(commentData.data.replies) != "object") {
+//         if(typeof(commentData.data.replies) != "string") {
+//             return [''];
+//         } else {
+//             return [commentData.data.body];
+//         }
+//     } else {
+//         let tempComments = [];
+//         for (reply of commentData.data.replies.data.children) {
+//             let returnArrayComments = await getComments(reply);
+//             tempComments.concat(returnArrayComments);
+//             tempComments.push(reply.data.body);
+//         }
+//         return tempComments;
+//     }
+// };
+
 const getComments = async (commentData) => {
-    if (typeof(commentData.data.replies) != "object") {
-        if(typeof(commentData.data.replies) != "string") {
-            return [''];
-        } else {
-            console.log(commentData.data.body);
-            return [commentData.data.body];
-        }
-    } else {
-        let tempComments = [];
-        for (reply of commentData.data.replies.data.children) {
-            let test = await getComments(reply);
-        }
-    }
+    let parentNodes = commentData.data.replies.children
 };
 
 const handlePosts = async (postData) => {
@@ -50,6 +56,7 @@ const handlePosts = async (postData) => {
     //     postText.concat(threadText);
     // }
     const threadText = await getComments(postData[1].data.children[0]);
+    console.log(threadText);
 };
 
 const createAxiosRequests = async (allPostURLs) => {
