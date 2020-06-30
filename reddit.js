@@ -57,25 +57,28 @@ const handlePosts = async (postData) => {
         const threadText = await getComments(thread);
         postText.push(...threadText);
     }    
+    
+    return postText;
 };
 
-const createAxiosRequests = async (allPostURLs) => {
+const getAllPostText = async (allPostURLs) => {
     let axiosRequests = [];
     let postsTextArray = [];
 
+    //creating an array of axios get requests for each post
     for (const url of allPostURLs) {
         const getRedditPost = axios.get(`https://www.reddit.com${url}.json`).catch(error => {return error});
         axiosRequests.push(getRedditPost);
     }
 
+    //Making each get request and storing responses in array
     const allResponses = await Promise.all(axiosRequests);
 
-    // for (post of allResponses) {
-    //     const textOnPost = await handlePosts(post.data);
-    //     console.log(textOnPost);
-    //     postsTextArray.push(textOnPost);
-    // }
-    const textOnPost = await handlePosts(allResponses[0].data);
+    //iterating through each response and getting all the text from each post
+    for (post of allResponses) {
+        const textOnPost = await handlePosts(post.data);
+        postsTextArray.push(...textOnPost);
+    }
 
     return postsTextArray;
 };
@@ -96,7 +99,9 @@ const initialize = async (subreddit, sort) => {
     if (allPostURLs==false){
         return;
     } else {        
-        const postRequests = await createAxiosRequests(allPostURLs);
+        //Gets an array of strings of all comments and titles
+        const allPostText = await getAllPostText(allPostURLs);
+        console.log(allPostText.length);
     }
 };
 
