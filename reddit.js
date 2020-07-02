@@ -1,4 +1,5 @@
 const axios = require("axios");
+const textCleaner = require("./textHandler");
 
 //returns array of links of subreddit posts with parameters of objects of each post
 const setPostURLs = async (postsData) => {
@@ -88,12 +89,10 @@ const initialize = async (subreddit, sort) => {
     
     //Setting reddit URLS default to all posts instead of hot,top,new.
     //Limit set to 100 may change for custom amounts later
-    let redditURL = `https://www.reddit.com`;
-    let subredditURL = `/r/${subreddit}/${sort}.json?t=all&limit=100`;
-    let postsURL = redditURL + subredditURL;
+    let redditURL = `https://www.reddit.com/r/${subreddit}/${sort}.json?t=all&limit=100`;
     
     //gets array of post URLs
-    const allPostURLs = await getPostURLS(postsURL);
+    const allPostURLs = await getPostURLS(redditURL);
 
     //if false the subreddit doesn't exist
     if (allPostURLs==false){
@@ -101,7 +100,9 @@ const initialize = async (subreddit, sort) => {
     } else {        
         //Gets an array of strings of all comments and titles
         const allPostText = await getAllPostText(allPostURLs);
-        console.log(allPostText.length);
+        const cleanText = textCleaner.cleanText(allPostText);
+        const allWordsArray = cleanText.toLowerCase().split(/(\s+)/);
+        console.log(allWordsArray);
     }
 };
 
