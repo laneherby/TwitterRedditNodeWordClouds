@@ -1,3 +1,3 @@
 const reddit = require("./reddit");
 
-reddit.initialize("node", "top");
+reddit.initialize("node", "top", 50);

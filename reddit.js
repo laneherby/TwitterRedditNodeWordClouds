@@ -85,7 +85,7 @@ const getAllPostText = async (allPostURLs) => {
 };
 
 //starter function with params of name of subreddit and how the posts are sorted
-const initialize = async (subreddit, sort) => {    
+const initialize = async (subreddit, sort, numWords) => {    
     
     //Setting reddit URLS default to all posts instead of hot,top,new.
     //Limit set to 100 may change for custom amounts later
@@ -95,7 +95,7 @@ const initialize = async (subreddit, sort) => {
     const allPostURLs = await getPostURLS(redditURL);
 
     //if false the subreddit doesn't exist
-    if (allPostURLs==false){
+    if (allPostURLs==false) {
         return;
     } else {        
         //Gets an array of strings of all comments and titles
@@ -103,7 +103,9 @@ const initialize = async (subreddit, sort) => {
         const cleanText = textHandler.cleanText(allPostText);
         const allWordsArray = cleanText.toLowerCase().split(/(\s+)/);
         const wordCounts = textHandler.countWords(allWordsArray);
-        console.log(Object.keys(wordCounts));
+        const topWords = textHandler.createTopWordObject(wordCounts, numWords);
+
+        return topWords;
     }
 };
 
