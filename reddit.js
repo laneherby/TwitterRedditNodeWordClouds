@@ -1,5 +1,5 @@
 const axios = require("axios");
-const textCleaner = require("./textHandler");
+const textHandler = require("./textHandler");
 
 //returns array of links of subreddit posts with parameters of objects of each post
 const setPostURLs = async (postsData) => {
@@ -100,9 +100,10 @@ const initialize = async (subreddit, sort) => {
     } else {        
         //Gets an array of strings of all comments and titles
         const allPostText = await getAllPostText(allPostURLs);
-        const cleanText = textCleaner.cleanText(allPostText);
+        const cleanText = textHandler.cleanText(allPostText);
         const allWordsArray = cleanText.toLowerCase().split(/(\s+)/);
-        console.log(allWordsArray);
+        const wordCounts = textHandler.countWords(allWordsArray);
+        console.log(Object.keys(wordCounts));
     }
 };
 
