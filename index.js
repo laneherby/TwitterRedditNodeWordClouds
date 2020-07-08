@@ -1,3 +1,6 @@
 const reddit = require("./reddit");
+const twitter = require("./twitter");
 
-reddit.initialize("node", "top", 50);
+//reddit.initialize("node", "top", 50);
+
+twitter.initialize("laneherby");
