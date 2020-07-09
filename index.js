@@ -3,4 +3,4 @@ const twitter = require("./twitter");
 
 //reddit.initialize("node", "top", 50);
 
-twitter.initialize("laneherby");
+twitter.initialize("jericho");

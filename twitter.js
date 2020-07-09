@@ -14,16 +14,29 @@ const initialize = async (username) => {
         exclude_replies: false,
         include_rts: false,
         trim_user: true,
-        //max_id: 1280210947014119400
+        count: 200
     };
 
-    twitClient.get("statuses/user_timeline", twitParams, (error, tweets, res) => {
-        if (!error) {
-            for (tweet of tweets){
-                console.log(`${tweet.id}: ${tweet.text}`);
-            }
-        }
-    });
+    const END_OF_TWEETS = false;
+    const allTweetsText = [];
+
+    
+
+    // twitClient.get("statuses/user_timeline", twitParams).then((tweets) => {
+    //     console.log(tweets.length);
+    // });
+
+    while (!END_OF_TWEETS || allTweetsText.length <= 400) {
+        twitClient.get("statuses/user_timeline", twitParams).then((tweets, error, res) => {
+            if (!error) {
+                for (tweet of tweets) {
+                    allTweetsText.push(tweet.text);
+                }
+                twitParams.max_id=tweets[tweets.length-1];
+                console.log(allTweetsText);
+            } else { END_OF_TWEETS = true; }
+        });
+    }
 };
 
 exports.initialize = initialize;
