@@ -15,6 +15,9 @@ const countWords = (allWordsArray) => {
     const notUsedWords = [
         "the",
         "them",
+        "gonna",
+        "got",
+        "them",
         "much",
         "good",
         "same",
