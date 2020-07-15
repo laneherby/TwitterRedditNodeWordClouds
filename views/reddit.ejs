@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <%- include("parts/head") -%> 
+</head>
+<body>
+  <%- include("layouts/header") -%> 
+
+  <main>
+    <div class="valign-wrapper" style="width:100%;height:80%;position: absolute;">
+      <div class="valign" style="width:100%;">
+        <div class="container center-align">
+          <div class="row">
+            <div class="col s12 main-title white-text">
+              <h4>Enter the name of the subreddit you would like to use to make a wordcloud.</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <input id="subredditName" type="text" class="validate">
+              <label for="subredditName">Name of Subreddit</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select>
+                <option value="top" selected>Top</option>
+                <option value="hot">Hot</option>
+                <option value="new">New</option>
+              </select>
+              <label>Subreddit Sort</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <%- include("layouts/footer") -%> 
+  
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+      let options = {};
+      let elems = document.querySelectorAll('select');
+      let instances = M.FormSelect.init(elems, options);
+    });
+  </script>
+</body>
+</html>

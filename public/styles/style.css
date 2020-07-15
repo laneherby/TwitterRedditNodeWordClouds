@@ -18,3 +18,11 @@
   main {
     flex: 1 0 auto;
   }
+
+  .card-fa {
+    font-size: 100px !important;
+  }
+
+  .main-title {
+    background-color: #00695c;
+  }
