@@ -169,13 +169,13 @@ const countWords = (allWordsArray) => {
 const createTopWordObject = (wordCounts, numWords) => {
     const sortedArrayEntries = Object.entries(wordCounts).sort((a,b) => b[1]-a[1]);
 
-    let topWordsObject = {};
+    // let topWordsObject = {};
 
-    for (let wCount=0; wCount<numWords; wCount++) {
-        topWordsObject[sortedArrayEntries[wCount][0]] = sortedArrayEntries[wCount][1];
-    }
+    // for (let wCount=0; wCount<numWords; wCount++) {
+    //     topWordsObject[sortedArrayEntries[wCount][0]] = sortedArrayEntries[wCount][1];
+    // }
 
-    return topWordsObject;
+    return sortedArrayEntries;
 };
 
 exports.cleanText = cleanText;

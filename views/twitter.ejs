@@ -7,9 +7,79 @@
   <%- include("layouts/header") -%> 
 
   <main>
-      twitter
+    <div class="valign-wrapper" style="width:100%;height:80%;position: absolute;">
+      <div class="valign" style="width:100%;">
+        <div class="container center-align">
+          <div class="row">
+            <div class="col s12 main-title white-text">
+              <h4>Enter the username of a Twitter profile you would like to use to make a wordcloud.</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m4">
+              <input id="txtTwitter" type="text" class="validate">
+              <label for="txtTwitter">Twitter Username</label>
+            </div>
+            <div class="input-field col s12 m4">
+              <input id="txtNumTweets" class="validate" type="text" onkeypress="return isNumberKey(event)">
+              <label for="txtNumTweets" id="lblNumTweets">Number of Tweets (1k - 5k)</label>
+            </div>
+            <div class="input-field col s12 m4">
+              <input id="txtNumWords" class="validate" type="text" onkeypress="return isNumberKey(event)">
+              <label for="txtNumWords" id="lblNumWords">Number of Words in Cloud (10 - 50)</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 right-align">
+              <button class="btn waves-effect waves-light" type="submit" name="action" onclick="createClick()">Create</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
   
   <%- include("layouts/footer") -%> 
+  
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+      let options = {};
+      let elems = document.querySelectorAll('select');
+      let instances = M.FormSelect.init(elems, options);
+    });
+
+    const createClick = () => {
+      let allGood = true;
+
+      const numTweets = document.getElementById("txtNumTweets").value;
+      const numTweetsLabel = document.getElementById("lblNumTweets");
+      const numWords = document.getElementById("txtNumWords").value;
+      const numWordsLabel = document.getElementById("lblNumWords");
+
+      if (numTweets<1000 || numTweets>5000) {
+        document.getElementById("txtNumTweets").value = "";
+        numTweetsLabel.style.color = "red";
+        numTweetsLabel.classList.remove("active");
+        allGood = false;
+      }
+
+      if (numWords<10 || numWords>50) {
+        document.getElementById("txtNumWords").value = "";
+        numWordsLabel.style.color = "red";
+        numWordsLabel.classList.remove("active");
+        allGood = false;
+      }
+      
+      if (allGood) window.location.href = `${window.location.origin}/twitter/cloud/${twitterUsername}/${numTweets}/`;
+    };
+
+    const isNumberKey = (event) => {
+      const charCode = (event.which) ? event.which : event.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+          return false;
+      return true;
+    };
+  </script>
 </body>
 </html>

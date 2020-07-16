@@ -1,7 +1,7 @@
 const Twit = require("twit");
 const textHandler = require("./textHandler")
 
-const initialize = async (username, includeReplies, numWords) => {
+const initialize = async (username, numTweets, numWords) => {
     const twitClient = new Twit({
         consumer_key: "JQjtyssiKnTzFkMA79S90t4PU",
         consumer_secret: "sRRrjSFJr5MMEW7LWCBD8M65DwUqfQZeei6VjZH5UmGaLQb2FI",
@@ -11,7 +11,7 @@ const initialize = async (username, includeReplies, numWords) => {
 
     const twitParams = {
         screen_name: username,
-        exclude_replies: !includeReplies,
+        exclude_replies: true,
         include_rts: false,
         trim_user: true,
         count: 200
@@ -21,7 +21,7 @@ const initialize = async (username, includeReplies, numWords) => {
     const allTweetsText = []; 
     let twitError = "";
 
-    while (!endOfTweets && twitError.length==0 && allTweetsText.length<5000) {
+    while (!endOfTweets && twitError.length==0 && allTweetsText.length<numTweets) {
         const tweets = await twitClient.get("statuses/user_timeline", twitParams)
             .catch((error) => {
                 switch (error.code) {
