@@ -26,3 +26,8 @@
   .main-title {
     background-color: #00695c;
   }
+
+  .cloud-border {
+    border: 5px solid #00695c;
+    background-color: lightgray
+  }

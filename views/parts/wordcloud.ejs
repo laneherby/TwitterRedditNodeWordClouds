@@ -1,20 +1,66 @@
-<script type="text/javascript" src="./js/wordcloud2.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
 
 <script type="text/javascript">
     let listWords = [
-        ["foo", 4],
-        ["xyz", 5],
-        ["code", 6],
-        ["node", 7],
-        ["java", 8],
-        ["script", 9],
-        ["consleo", 10],
-        ["log", 11],
-        ["npm", 15],
-        ["parts", 20],
-        ["spyro", 25],
-        ["sparx", 50]
+        { text: 'live', size: 156 },
+        { text: 'twitch', size: 118 },
+        { text: 'today', size: 66 },
+        { text: 'day', size: 55 },
+        { text: 'time', size: 32 },
+        { text: 'shhhh', size: 31 },
+        { text: 'stream', size: 31 },
+        { text: 'come', size: 29 },
+        { text: 'over', size: 26 },
+        { text: 'go', size: 26 },
+        { text: 'back', size: 24 },
+        { text: 'valorant', size: 22 },
+        { text: 'lets', size: 21 },
+        { text: 'people', size: 21 },
+        { text: '100', size: 20 },
+        { text: 'yurt', size: 20 },
+        { text: 'make', size: 20 },
+        { text: 'ever', size: 19 },
+        { text: 'game', size: 19 },
+        { text: 'tarkov', size: 19 },
+        { text: 'playing', size: 18 },
+        { text: 'games', size: 18 },
+        { text: 'new', size: 18 },
+        { text: 'big', size: 18 },
+        { text: 'know', size: 18 }
     ];
 
-    WordCloud(document.getElementById("cloudcontainer"), {list: listWords})
+    let contWidth = document.getElementById("cloudContainer").offsetWidth;
+    let contHeight = window.innerHeight * 0.75;
+
+    console.log("<%= tempList %>");
+
+    const draw = (words) => {
+        d3.select("#cloudContainer").append("svg")
+            .attr("width", layout.size()[0])
+            .attr("height", layout.size()[1])
+            .append("g")
+            .attr("transform", `translate(${layout.size()[0] / 2},${layout.size()[1] / 2})`)
+            .selectAll("text")
+            .data(words)
+            .enter().append("text")
+            .style("font-size", (d) => { return `${d.size*1.25}px`; })
+            .style("font-family", "Roboto")
+            .attr("text-anchor", "middle")
+            .attr("transform", (d) => {
+                return `translate(${[d.x*1.25, d.y*1.25]})rotate(${d.rotate})`;
+            })
+            .text((d) => d.text);
+    }
+
+    var layout = d3.layout.cloud()
+    .size([contWidth, contHeight])
+    .words(listWords)
+    .padding(2)
+    .rotate(() => { return ~~(Math.random() * 2) * 90; })
+    .font("Times")
+    .fontSize((d) => { return d.size; })
+    .on("end", draw);
+
+    layout.start();
 </script>

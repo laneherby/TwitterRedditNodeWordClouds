@@ -55,7 +55,6 @@ const initialize = async (username, numTweets, numWords) => {
         const allWordsArray = cleanText.toLowerCase().split(/(\s+)/);
         const wordCounts = textHandler.countWords(allWordsArray);
         const topWords = textHandler.createTopWordObject(wordCounts, numWords);
-        console.log(topWords);
     } else {
         return twitError;
     }
