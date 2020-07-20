@@ -22,7 +22,7 @@ const getPostURLS = async (postsURL) => {
         //if subreddit does exist it returns all the post URLs
         if (postURLsFinished===undefined || postURLsFinished.length==0) return false;
         else return postURLsFinished;
-    } catch (err) { console.log(err); }
+    } catch (err) { return false }
 };
 
 //Parses through all the comments and gets the strings
@@ -96,7 +96,7 @@ const initialize = async (subreddit, sort, numWords) => {
 
     //if false the subreddit doesn't exist
     if (allPostURLs==false) {
-        return;
+        return "Trouble finding that subreddit.";
     } else {        
         //Gets an array of strings of all comments and titles
         const allPostText = await getAllPostText(allPostURLs);

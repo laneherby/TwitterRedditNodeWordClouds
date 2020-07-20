@@ -24,20 +24,7 @@ const initialize = async (username, numTweets, numWords) => {
     while (!endOfTweets && twitError.length==0 && allTweetsText.length<numTweets) {
         const tweets = await twitClient.get("statuses/user_timeline", twitParams)
             .catch((error) => {
-                switch (error.code) {
-                    case 34:
-                        twitError = "User doesn't exist";
-                        break;
-                    case 50:
-                        twitError = "User doesn't exist";
-                        break;
-                    case 63:
-                        twitError = "User is suspended";
-                        break;
-                    default:
-                        twitError = "There was an error fetching tweets";
-                        break;
-                }
+                twitError = "Couldn't find tweets for that user.";
         });
 
         if (twitError.length == 0) {
@@ -55,6 +42,7 @@ const initialize = async (username, numTweets, numWords) => {
         const allWordsArray = cleanText.toLowerCase().split(/(\s+)/);
         const wordCounts = textHandler.countWords(allWordsArray);
         const topWords = textHandler.createTopWordObject(wordCounts, numWords);
+        return topWords
     } else {
         return twitError;
     }

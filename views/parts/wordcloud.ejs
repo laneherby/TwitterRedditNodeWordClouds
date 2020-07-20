@@ -30,10 +30,12 @@
         { text: 'know', size: 18 }
     ];
 
-    let contWidth = document.getElementById("cloudContainer").offsetWidth;
+    let contWidth = window.innerWidth*.8;
     let contHeight = window.innerHeight * 0.75;
 
-    console.log("<%= tempList %>");
+    let wordList = JSON.parse('<%- nodeWordList %>');
+    const fontScaleValue = 250 / wordList[0].size;
+    console.log(wordList);
 
     const draw = (words) => {
         d3.select("#cloudContainer").append("svg")
@@ -44,22 +46,22 @@
             .selectAll("text")
             .data(words)
             .enter().append("text")
-            .style("font-size", (d) => { return `${d.size*1.25}px`; })
+            .style("font-size", (d) => { return `${d.size}px`; })
             .style("font-family", "Roboto")
             .attr("text-anchor", "middle")
             .attr("transform", (d) => {
-                return `translate(${[d.x*1.25, d.y*1.25]})rotate(${d.rotate})`;
+                return `translate(${[d.x, d.y]})rotate(${d.rotate})`;
             })
             .text((d) => d.text);
     }
 
     var layout = d3.layout.cloud()
     .size([contWidth, contHeight])
-    .words(listWords)
-    .padding(2)
+    .words(wordList)
+    .padding(5)
     .rotate(() => { return ~~(Math.random() * 2) * 90; })
     .font("Times")
-    .fontSize((d) => { return d.size; })
+    .fontSize((d) => { return d.size * fontScaleValue; })
     .on("end", draw);
 
     layout.start();
