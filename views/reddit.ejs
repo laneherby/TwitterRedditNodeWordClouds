@@ -12,7 +12,9 @@
         <div class="container center-align">
           <div class="row">
             <div class="col s12 main-title white-text">
-              <h4>Enter the name of the subreddit you would like to use to make a wordcloud.</h4>
+              <span id="headerTitle">
+                <h6>Enter the name of the subreddit you would like to use to make a wordcloud.</h6>
+              </span>
             </div>
           </div>
           <div class="row">
@@ -67,6 +69,14 @@
       } else {
         window.location.href = `${window.location.origin}/reddit/cloud/${subreddit}/${sortValue}/${numWords}/`;
       }
+    }
+
+    if (window.innerWidth < 768) {
+      document.getElementById("headerTitle").outerHTML = document.getElementById("headerTitle").outerHTML.replaceAll("h6", "h6");
+    } else if (window.innerWidth < 992) {
+      document.getElementById("headerTitle").outerHTML = document.getElementById("headerTitle").outerHTML.replaceAll("h6", "h5");
+    } else if (window.innerWidth > 1200) {
+      document.getElementById("headerTitle").outerHTML = document.getElementById("headerTitle").outerHTML.replaceAll("h6", "h4");
     }
   </script>
 </body>

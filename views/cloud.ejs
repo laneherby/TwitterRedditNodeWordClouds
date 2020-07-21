@@ -11,7 +11,9 @@
       <div class="row"></div>
       <div class="row">
         <div class="col s12 main-title white-text">
-          <h4>Wordcloud for <%= type %>: <%= identifier %></h4>
+          <span id="headerTitle">
+            <h6>Wordcloud for <%= type %>: <%= identifier %></h6>
+          </span>
         </div>
       </div>
     </div>
@@ -24,6 +26,16 @@
   </main>
   
   <%- include("layouts/footer") -%>
+
+  <script>
+    if (window.innerWidth < 768) {
+      document.getElementById("headerTitle").outerHTML = document.getElementById("headerTitle").outerHTML.replaceAll("h6", "h6");
+    } else if (window.innerWidth < 992) {
+      document.getElementById("headerTitle").outerHTML = document.getElementById("headerTitle").outerHTML.replaceAll("h6", "h5");
+    } else if (window.innerWidth > 1200) {
+      document.getElementById("headerTitle").outerHTML = document.getElementById("headerTitle").outerHTML.replaceAll("h6", "h4");
+    }
+  </script>
 
   <%- include("parts/wordcloud") -%>
 </body>

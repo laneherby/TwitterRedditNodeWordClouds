@@ -30,12 +30,21 @@
         { text: 'know', size: 18 }
     ];
 
-    let contWidth = window.innerWidth*.8;
+    let maxFontSize = 250;
+    
+    if (window.innerWidth < 768) {
+        maxFontSize = 75;
+    } else if (window.innerWidth < 992) {
+        maxFontSize = 150;
+    } else if (window.innerWidth > 1200) {
+        maxFontSize = 250;
+    }
+    
+    let contWidth = document.getElementById("cloudContainer").offsetWidth;
     let contHeight = window.innerHeight * 0.75;
 
     let wordList = JSON.parse('<%- nodeWordList %>');
-    const fontScaleValue = 250 / wordList[0].size;
-    console.log(wordList);
+    const fontScaleValue = maxFontSize / wordList[0].size;
 
     const draw = (words) => {
         d3.select("#cloudContainer").append("svg")
