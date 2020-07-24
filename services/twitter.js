@@ -1,12 +1,13 @@
 const Twit = require("twit");
 const textHandler = require("./textHandler")
+require("dotenv").config();
 
 const initialize = async (username, numTweets, numWords) => {
     const twitClient = new Twit({
-        consumer_key: "JQjtyssiKnTzFkMA79S90t4PU",
-        consumer_secret: "sRRrjSFJr5MMEW7LWCBD8M65DwUqfQZeei6VjZH5UmGaLQb2FI",
-        access_token: "421317769-LWaNcsTwEt0StS3sh8qUwsR3E2sx8wth8DMpn9QK",
-        access_token_secret: "nJrUnJJHL1C2MfcU8XOvE4qVlEsROzd9Zlv9qBZd9XuDD",
+        consumer_key: process.env.CONSUMER_KEY,
+        consumer_secret: process.env.CONSUMER_SECRET,
+        access_token: process.env.ACCESS_TOKEN,
+        access_token_secret: process.env.ACCESS_TOKEN_SECRET
     });
 
     const twitParams = {
